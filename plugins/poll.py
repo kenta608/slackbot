@@ -26,11 +26,12 @@ def poll(message, params):
     # ref https://github.com/lins05/slackbot/issues/43
     send_user = message.channel._client.users[message.body['user']][u'name']
     post = {
-        'pretext': '@here' + '{}さんからアンケートがあります。'.format(send_user),
-        'title': "今日のサウナ",
-        'author_name': send_user,
+        'pretext': '<!here> ' + 'アンケートがあります。'.format(send_user),
+        # 'title': ":sauna_ikitai:",
+        "thumb_url": "https://assets.st-note.com/production/uploads/images/24696877/rectangle_large_type_2_18455272374e6f5762b817252b78729c.png?fit=bounds&format=jpeg&quality=45&width=960",
+        # 'author_name': send_user,
         'text': '\n'.join(options),
-        'color': 'good'
+        'color': "#4999ff"
     }
 
     # 返信を送る部分
