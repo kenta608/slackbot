@@ -72,6 +72,7 @@ def get_sauna_name_url(keyword):
     return sauna_dict
 
 
+#TODO: 複数のキーワードに対応していない
 @respond_to('サウナ (.*)')
 def suggest_sauna(message, params):
     # paramsを分解
@@ -84,6 +85,7 @@ def suggest_sauna(message, params):
     # args
     keyword = params
     sauna_dict = get_sauna_name_url(keyword)
+    print(len(sauna_dict))
     sauna_list = random.sample(list(sauna_dict.items()), 4)
     
     options = []
