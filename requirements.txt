@@ -1,0 +1,12 @@
+beautifulsoup4==4.9.1
+certifi==2020.6.20
+chardet==3.0.4
+idna==2.10
+requests==2.24.0
+six==1.15.0
+slackbot==1.0.0
+slacker==0.14.0
+soupsieve==2.0.1
+tqdm==4.47.0
+urllib3==1.25.9
+websocket-client==0.44.0
