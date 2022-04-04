@@ -16,7 +16,7 @@ slackbot==1.0.0
 slacker==0.14.0
 soupsieve==2.0.1
 tqdm==4.47.0
-urllib3==1.25.11
+urllib3==1.26.5
 virtualenv==20.14.0
 virtualenv-clone==0.5.7
 websocket-client==0.44.0
