@@ -1,3 +1,4 @@
+from typing import List
 import requests
 import bs4
 import random
@@ -71,6 +72,21 @@ def get_sauna_name_url(keyword):
     return sauna_dict
 
 
+def delete_ng_element(sauna_dict: dict, ng_list: List[str]) -> dict:
+    """
+    ngワードに指定されたワードを含む辞書を削除するß
+    スポーツジム系のサウナを消したい
+    """
+    ng_keys = []
+    for key in sauna_dict.keys():
+        for ng_word in ng_list:
+            if ng_word in key:
+                ng_keys.append(key)
+    new_sauna_dict = {k: v for k, v in sauna_dict.items() if k not in ng_keys}
+    return new_sauna_dict
+
+
+
 #TODO: 複数のキーワードに対応していない
 @respond_to('サウナ (.*)')
 def suggest_sauna(message, params):
@@ -84,6 +100,11 @@ def suggest_sauna(message, params):
     # args
     keyword = params
     sauna_dict = get_sauna_name_url(keyword)
+    print(sauna_dict)
+    # ng_listの言葉をkeyに含んでいるものは削除する
+    sauna_dict = delete_ng_element(sauna_dict, ["ジム", "スポーツ", "ホテル"])
+    print(sauna_dict)
+
     sauna_list = random.sample(list(sauna_dict.items()), 4)
     
     options = []
