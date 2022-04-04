@@ -1,9 +1,8 @@
 import requests
 import bs4
 import random
-import csv
+
 from slackbot.bot import respond_to
-from tqdm import tqdm
 
 
 def is_exist_webpage(url_string):
@@ -49,10 +48,10 @@ def get_sauna_name_url(keyword):
     web_url = 'https://sauna-ikitai.com/search?keyword=' + keyword
 
     get_url_web_info = is_exist_webpage(web_url)
+    sauna_dict = {}
     if get_url_web_info.status_code == 200:
         # 検索にヒットしたページ数を取得
         page_num = select_info(get_url_web_info.text, 'li.c-pagenation_link a')
-        sauna_dict = {}
         for elem in page_num:
             # 各ページでの処理
             page_url = elem.get('href')
@@ -85,17 +84,12 @@ def suggest_sauna(message, params):
     # args
     keyword = params
     sauna_dict = get_sauna_name_url(keyword)
-    print(len(sauna_dict))
     sauna_list = random.sample(list(sauna_dict.items()), 4)
     
     options = []
     for name, url in sauna_list:
         options.append('{}: {}'.format(name, url))
    
-    # options = []
-    # for i, o in enumerate(args):
-    #     options.append(':{}: {}'.format(EMOJIS[i], o))
-
     # メッセージ作成
     # ref https://github.com/lins05/slackbot/issues/43
     send_user = message.channel._client.users[message.body['user']][u'name']
@@ -117,6 +111,9 @@ def suggest_sauna(message, params):
     )
     ts = ret.body['ts']
 
+    
+    
+    
     # # ここスタンプ押すところ
     # for i, _ in enumerate(options):
     #     message._client.webapi.reactions.add(
