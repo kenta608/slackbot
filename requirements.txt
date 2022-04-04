@@ -1,12 +1,22 @@
 beautifulsoup4==4.9.1
-certifi==2020.6.20
+certifi==2021.10.8
 chardet==3.0.4
+distlib==0.3.4
+filelock==3.6.0
 idna==2.10
+numpy @ file:///home/conda/feedstock_root/build_artifacts/numpy_1622014599281/work
+pandas==1.2.3
+platformdirs==2.5.1
+python-dateutil @ file:///home/conda/feedstock_root/build_artifacts/python-dateutil_1626286286081/work
+pytz @ file:///home/conda/feedstock_root/build_artifacts/pytz_1647961439546/work
 requests==2.24.0
-six==1.15.0
+schedule @ file:///home/conda/feedstock_root/build_artifacts/schedule_1618057034732/work
+six @ file:///home/conda/feedstock_root/build_artifacts/six_1620240208055/work
 slackbot==1.0.0
 slacker==0.14.0
 soupsieve==2.0.1
 tqdm==4.47.0
-urllib3==1.25.9
+urllib3==1.25.11
+virtualenv==20.14.0
+virtualenv-clone==0.5.7
 websocket-client==0.44.0
