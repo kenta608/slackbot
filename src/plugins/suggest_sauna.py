@@ -1,8 +1,8 @@
-from typing import List
-import requests
-import bs4
 import random
+from typing import List
 
+import bs4
+import requests
 from slackbot.bot import respond_to
 
 
@@ -12,8 +12,6 @@ def is_exist_webpage(url_string):
     そうでないなら、Noneとする
     """
     try:
-        # get_url_info = requests.get('https://sauna-ikitai.com/search?keyword=中野')
-        # get_url_info = requests.get('https://sauna-ikitai.com/saunas/1754')
         get_url_info = requests.get(url_string)
     except requests.exceptions.ProxyError:
         print("存在しないpage")
@@ -46,29 +44,33 @@ def get_sauna_name_url(keyword):
     検索ページのurlからサウナ名とurlを辞書で返す
     """
     # 検索結果
-    web_url = 'https://sauna-ikitai.com/search?keyword=' + keyword
+    web_url = "https://sauna-ikitai.com/search?keyword=" + keyword
 
     get_url_web_info = is_exist_webpage(web_url)
     sauna_dict = {}
     if get_url_web_info.status_code == 200:
         # 検索にヒットしたページ数を取得
-        page_num = select_info(get_url_web_info.text, 'li.c-pagenation_link a')
+        page_num = select_info(get_url_web_info.text, "li.c-pagenation_link a")
         for elem in page_num:
             # 各ページでの処理
-            page_url = elem.get('href')
+            page_url = elem.get("href")
             get_url_info = is_exist_webpage(page_url)
 
             if get_url_info.status_code == 200:
                 # サウナの名前とurlをとってくる
-                name_list = []
-                names = select_info(get_url_info.text, '.p-saunaItemName h3')
-                page_list = []
-                pages = select_info(get_url_info.text, '.p-saunaItem.p-saunaItem--list a')
+                # name_list = []
+                names = select_info(get_url_info.text, ".p-saunaItemName h3")
+                # page_list = []
+                pages = select_info(
+                    get_url_info.text, ".p-saunaItem.p-saunaItem--list a"
+                )
 
-                check_list_num(names, pages)                
+                check_list_num(names, pages)
 
                 for i in range(len(names)):
-                    sauna_dict[names[i].getText().strip()] = pages[i].get('href')
+                    sauna_dict[names[i].getText().strip()] = pages[i].get(
+                        "href"
+                    )
     return sauna_dict
 
 
@@ -86,12 +88,11 @@ def delete_ng_element(sauna_dict: dict, ng_list: List[str]) -> dict:
     return new_sauna_dict
 
 
-
-#TODO: 複数のキーワードに対応していない
-@respond_to('サウナ (.*)')
+# TODO: 複数のキーワードに対応していない
+@respond_to("サウナ (.*)")
 def suggest_sauna(message, params):
     # paramsを分解
-    #TODO: ここの処理を考える (現状できない)
+    # TODO: ここの処理を考える (現状できない)
     # args = [row for row in csv.reader([params], delimiter=' ')][0]
     # if len(args) < 1:
     #     message.reply('使用方法: サウナ ~区')
@@ -106,35 +107,33 @@ def suggest_sauna(message, params):
     print(sauna_dict)
 
     sauna_list = random.sample(list(sauna_dict.items()), 4)
-    
+
     options = []
     for name, url in sauna_list:
-        options.append('{}: {}'.format(name, url))
-   
+        options.append("{}: {}".format(name, url))
+
     # メッセージ作成
     # ref https://github.com/lins05/slackbot/issues/43
-    send_user = message.channel._client.users[message.body['user']][u'name']
+    # send_user = message.channel._client.users[message.body["user"]]["name"]
     post = {
-        'pretext': 'こちらなんてどうでしょうか',
-        'title': "今日のサウナ",
+        "pretext": "こちらなんてどうでしょうか",
+        "title": "今日のサウナ",
         # 'author_name': send_user,
-        'text': '\n'.join(options),
-        'color': 'good'
+        "text": "\n".join(options),
+        "color": "good",
     }
 
     # 返信を送る部分
-    ret = message._client.webapi.chat.post_message(
-        message._body['channel'],
-        '',
-        username=message._client.login_data['self']['name'],
-        as_user=True,
-        attachments=[post]
-    )
-    ts = ret.body['ts']
 
-    
-    
-    
+    ret = message._client.webapi.chat.post_message(  # noqa: F841
+        message._body["channel"],
+        "",
+        username=message._client.login_data["self"]["name"],
+        as_user=True,
+        attachments=[post],
+    )
+    # ts = ret.body["ts"]
+
     # # ここスタンプ押すところ
     # for i, _ in enumerate(options):
     #     message._client.webapi.reactions.add(

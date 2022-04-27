@@ -1,7 +1,8 @@
-import requests
-import bs4
 import random
-from tqdm import tqdm
+
+import bs4
+import requests
+
 
 def is_exist_webpage(url_string):
     """
@@ -9,8 +10,6 @@ def is_exist_webpage(url_string):
     そうでないなら、Noneとする
     """
     try:
-        # get_url_info = requests.get('https://sauna-ikitai.com/search?keyword=中野')
-        # get_url_info = requests.get('https://sauna-ikitai.com/saunas/1754')
         get_url_info = requests.get(url_string)
     except requests.exceptions.ProxyError:
         print("存在しないpage")
@@ -43,32 +42,37 @@ def get_sauna_name_url(keyword):
     検索ページのurlからサウナ名とurlを辞書で返す
     """
     # 検索結果
-    web_url = 'https://sauna-ikitai.com/search?keyword=' + keyword
+    web_url = "https://sauna-ikitai.com/search?keyword=" + keyword
 
     get_url_web_info = is_exist_webpage(web_url)
     if get_url_web_info.status_code == 200:
         # 検索にヒットしたページ数を取得
-        page_num = select_info(get_url_web_info.text, 'li.c-pagenation_link a')
+        page_num = select_info(get_url_web_info.text, "li.c-pagenation_link a")
         sauna_dict = {}
         for elem in page_num:
             # 各ページでの処理
-            page_url = elem.get('href')
+            page_url = elem.get("href")
             get_url_info = is_exist_webpage(page_url)
 
             if get_url_info.status_code == 200:
                 # サウナの名前とurlをとってくる
-                name_list = []
-                names = select_info(get_url_info.text, '.p-saunaItemName h3')
-                page_list = []
-                pages = select_info(get_url_info.text, '.p-saunaItem.p-saunaItem--list a')
+                # name_list = []
+                names = select_info(get_url_info.text, ".p-saunaItemName h3")
+                # page_list = []
+                pages = select_info(
+                    get_url_info.text, ".p-saunaItem.p-saunaItem--list a"
+                )
 
-                check_list_num(names, pages)                
+                check_list_num(names, pages)
 
                 for i in range(len(names)):
-                    sauna_dict[names[i].getText().strip()] = pages[i].get('href')
+                    sauna_dict[names[i].getText().strip()] = pages[i].get(
+                        "href"
+                    )
     return sauna_dict
 
-if __name__ == '__main__':
-    sauna_dict = get_sauna_name_url('中野区')
+
+if __name__ == "__main__":
+    sauna_dict = get_sauna_name_url("中野区")
     # print(sauna_dict)
     print(random.sample(list(sauna_dict.items()), 4))
