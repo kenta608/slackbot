@@ -1,0 +1,52 @@
+# pre-commit で実行されるコマンドを管理する
+# 実行コマンドに変更を加えたい場合は `entry:` を書き換えれば良い
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.1.0
+    hooks:
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+
+  - repo: local
+    hooks:
+      - id: isort
+        name: Re-order Python imports
+        language: python
+        entry: isort
+        types: [python]
+
+      - id: black
+        name: Re-format Python files
+        language: python
+        entry: black
+        types: [python]
+
+      - id: flake8
+        name: Lint Python files
+        language: python
+        entry: flake8
+        types: [python]
+        require_serial: true
+
+      - id: nbqa-isort
+        name: Re-order ipynb imports
+        language: python
+        entry: nbqa isort
+        types: [jupyter]
+
+      - id: nbqa-black
+        name: Re-Format ipynb files
+        language: python
+        entry: nbqa black
+        types: [jupyter]
+        require_serial: true
+
+      - id: nbqa-flake8
+        name: Lint ipynb files
+        language: python
+        entry: nbqa flake8
+        types: [jupyter]
+        args:
+          - "--extend-ignore=D,E402"
+        require_serial: true
