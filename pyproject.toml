@@ -12,6 +12,8 @@ requests = "^2.27.1"
 pandas = "^1.4.2"
 slackbot = "^1.0.0"
 slacker = "^0.14.0"
+tqdm = "^4.64.0"
+schedule = "^1.1.0"
 
 [tool.poetry.dev-dependencies]
 black = "^22.3.0"
