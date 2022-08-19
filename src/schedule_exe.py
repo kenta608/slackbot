@@ -40,7 +40,7 @@ def recommend_sauna(channel: str):
     """
     nakano_dic = get_sauna("中野区")
     shinjuku_dic = get_sauna("新宿区")
-    shibuya_dic = get_sauna("渋谷区")
+    kita_dic = get_sauna("赤羽")
     slack.chat.post_message(channel, "さぁ、サウナに行こう", as_user=True)
     slack.chat.post_message(
         channel, "", as_user=True, attachments=[nakano_dic]
@@ -48,9 +48,7 @@ def recommend_sauna(channel: str):
     slack.chat.post_message(
         channel, "", as_user=True, attachments=[shinjuku_dic]
     )
-    slack.chat.post_message(
-        channel, "", as_user=True, attachments=[shibuya_dic]
-    )
+    slack.chat.post_message(channel, "", as_user=True, attachments=[kita_dic])
 
 
 if __name__ == "__main__":

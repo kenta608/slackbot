@@ -58,12 +58,8 @@ def get_sauna_name_url(keyword):
 
             if get_url_info.status_code == 200:
                 # サウナの名前とurlをとってくる
-                # name_list = []
                 names = select_info(get_url_info.text, ".p-saunaItemName h3")
-                # page_list = []
-                pages = select_info(
-                    get_url_info.text, ".p-saunaItem.p-saunaItem--list a"
-                )
+                pages = select_info(get_url_info.text, ".p-saunaList a")
 
                 check_list_num(names, pages)
 
@@ -101,10 +97,10 @@ def suggest_sauna(message, params):
     # args
     keyword = params
     sauna_dict = get_sauna_name_url(keyword)
-    print(sauna_dict)
+    # print(sauna_dict)
     # ng_listの言葉をkeyに含んでいるものは削除する
     sauna_dict = delete_ng_element(sauna_dict, ["ジム", "スポーツ", "ホテル"])
-    print(sauna_dict)
+    # print(sauna_dict)
 
     sauna_list = random.sample(list(sauna_dict.items()), 4)
 
