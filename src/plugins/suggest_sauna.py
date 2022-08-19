@@ -102,38 +102,42 @@ def suggest_sauna(message, params):
     sauna_dict = delete_ng_element(sauna_dict, ["ジム", "スポーツ", "ホテル"])
     # print(sauna_dict)
 
-    sauna_list = random.sample(list(sauna_dict.items()), 4)
+    if len(sauna_dict) > 0:
+        sauna_list = random.sample(list(sauna_dict.items()), 4)
 
-    options = []
-    for name, url in sauna_list:
-        options.append("{}: {}".format(name, url))
+        options = []
+        for name, url in sauna_list:
+            options.append("{}: {}".format(name, url))
 
-    # メッセージ作成
-    # ref https://github.com/lins05/slackbot/issues/43
-    # send_user = message.channel._client.users[message.body["user"]]["name"]
-    post = {
-        "pretext": "こちらなんてどうでしょうか",
-        "title": "今日のサウナ",
-        # 'author_name': send_user,
-        "text": "\n".join(options),
-        "color": "good",
-    }
+        # メッセージ作成
+        post = {
+            "pretext": "こちらなんてどうでしょうか",
+            "title": "今日のサウナ",
+            # 'author_name': send_user,
+            "text": "\n".join(options),
+            "color": "good",
+        }
 
-    # 返信を送る部分
+        # 返信を送る部分
 
-    ret = message._client.webapi.chat.post_message(  # noqa: F841
-        message._body["channel"],
-        "",
-        username=message._client.login_data["self"]["name"],
-        as_user=True,
-        attachments=[post],
-    )
-    # ts = ret.body["ts"]
+        ret = message._client.webapi.chat.post_message(  # noqa: F841
+            message._body["channel"],
+            "",
+            username=message._client.login_data["self"]["name"],
+            as_user=True,
+            attachments=[post],
+        )
+    else:
+        post = {
+            "pretext": "おすすめはありません。 指定の範囲が狭すぎる可能性があります。",
+        }
 
-    # # ここスタンプ押すところ
-    # for i, _ in enumerate(options):
-    #     message._client.webapi.reactions.add(
-    #         name=EMOJIS[i],
-    #         channel=message._body['channel'],
-    #         timestamp=ts
-    #     )
+        # 返信を送る部分
+
+        ret = message._client.webapi.chat.post_message(  # noqa: F841
+            message._body["channel"],
+            "",
+            username=message._client.login_data["self"]["name"],
+            as_user=True,
+            attachments=[post],
+        )
